@@ -272,8 +272,18 @@ class Biome {
 class Console {
     constructor(params) {
         Object.assign(this, params);
+        this.writing = false;
         this.messages = [];
         this.consoleLog = [];
+        this.blinkingInterval = 20;
+        this.blinkingCounter = 0;
+        this.commands = [
+            {
+                name: "reset",
+                arguments: [],
+            }
+        ];
+        this.prompt = "";
     }
     logMessage(message) {
         let consoleObject = this;
@@ -291,18 +301,55 @@ class Console {
                     consoleObject.messages = consoleObject.messages.filter(e => e != messageObject);
                     SpaceDog.deleteEntity(this);
                 }, CONFIG.consoleMessageDuration);
+                
             },
             render() {
                 SpaceDog.context.save();
                 SpaceDog.context.fillStyle = "white";
-                SpaceDog.context.translate(20, this.transform.y - this.transform.height * consoleObject.messages.indexOf(this) * 4);
+                SpaceDog.context.translate(20, this.transform.y);
                 SpaceDog.context.font = `${this.transform.height * 2}px 'pixelFont'`;
-                SpaceDog.context.fillText(`> ${this.text}`, 0, 0);
+                SpaceDog.context.fillText(`> ${this.text}`, 0, 0 - (this.transform.height * 4 * (consoleObject.messages.indexOf(this) + (consoleObject.writing ? 1 : 0))));
                 SpaceDog.context.restore();
             },
         });
         consoleObject.messages = [line, ...consoleObject.messages];
         line.start();
+    }
+    startWriting() {
+        let consoleObject = this;
+        this.writing = true;
+        this.promptLine = new UIelement({
+            name: `console_message_${this.consoleLog.length}`,
+            layer: 64,
+            blinkingCounter: 0,
+            blinkingInterval: 200,
+            start() {
+                this.transform.height = SpaceDog.canvas.height / 110;
+                this.transform.y = SpaceDog.canvas.height - this.transform.height
+            },
+            render() {
+                this.blinkingCounter = this.blinkingCounter + SpaceDog.deltaTime;
+                if (this.blinkingCounter >= this.blinkingInterval) {
+                    this.blinkingCounter = 0;
+                }
+                SpaceDog.context.save();
+                SpaceDog.context.fillStyle = "white";
+                SpaceDog.context.translate(20, this.transform.y);
+                SpaceDog.context.font = `${this.transform.height * 2}px 'pixelFont'`;
+                SpaceDog.context.fillText(`> ${consoleObject.prompt}${(this.blinkingCounter >= this.blinkingInterval / 2) ? "_" : ""}`, 0, 0);
+                SpaceDog.context.restore();
+            },
+        });
+        this.promptLine.start();
+    }
+    sendPrompt() {
+        if (false) {
+            //Procesamiento de comandos   
+        }
+        this.logMessage(this.prompt);
+        SpaceDog.deleteEntity(this.promptLine);
+        this.prompt = "";
+        this.writing = false;
     }
 }
 
