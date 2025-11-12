@@ -19,7 +19,7 @@ const PROPS = {
             } else {
                 this.transform.y = randomBetween(50 + this.transform.height, SpaceDog.canvas.height - 50);
             }
-            this.transform.x = SpaceDog.canvas.width + this.transform.width + 10
+            this.transform.x = SpaceDog.canvas.width + this.transform.width + 10;
         },
         update() {
             this.transform.x -= 0.5 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;

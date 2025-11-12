@@ -69,10 +69,8 @@ class Engine {
         this.update = this.update.bind(this);
     }
 
-    update() {
+    update(timestamp = 0) {
         requestAnimationFrame(this.update);
-
-        let timestamp = window.performance.now();
 
         this.deltaTime = (timestamp - FPS.lastTimestamp) / 8.3;
 
@@ -101,6 +99,8 @@ class Engine {
             this.biomes[this.currentBiome].update();
         }
         FPS.lastTimestamp = timestamp;
+        console.log(timestamp);
+        
     }
 
     start() {

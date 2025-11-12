@@ -329,6 +329,7 @@ class Console {
             },
             render() {
                 this.blinkingCounter = this.blinkingCounter + SpaceDog.deltaTime;
+                
                 if (this.blinkingCounter >= this.blinkingInterval) {
                     this.blinkingCounter = 0;
                 }
