@@ -99,8 +99,6 @@ class Engine {
             this.biomes[this.currentBiome].update();
         }
         FPS.lastTimestamp = timestamp;
-        console.log(timestamp);
-        
     }
 
     start() {
@@ -115,6 +113,7 @@ class Engine {
         }
         this.currentBiome = CONFIG.currentBiome;
         this.biomes[this.currentBiome].start();
+
     }
 
     sortEntities() {
