@@ -144,7 +144,7 @@ class Engine {
             for (let i = 0; i < 15; i++) {
                 new Particle({
                     sprites: [ASSETS.sprites.particles[0], ASSETS.sprites.particles[1], ASSETS.sprites.particles[2]],
-                    speed: randomBetween(1, 4, false) * SpaceDog.deltaTime * SpaceDog.resolutionFactor,
+                    speed: randomBetween(1, 4, false) * SpaceDog.resolutionFactor,
                     layer: 32,
                     start() {
                         this.currentSprite = randomBetween(0, 2);
@@ -156,9 +156,9 @@ class Engine {
                         this.transform.direction = randomBetween(0, 360);
                     },
                     update() {
-                        this.opacity -= 0.01 * SpaceDog.deltaTime;
-                        this.transform.width += 0.1 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                        this.transform.height += 0.1 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                        this.opacity -= 0.01;
+                        this.transform.width += 0.1 * SpaceDog.resolutionFactor;
+                        this.transform.height += 0.1 * SpaceDog.resolutionFactor;
                         this.transform.x += Math.cos(degToRad(this.transform.direction)) * this.speed;
                         this.transform.y += Math.sin(degToRad(this.transform.direction)) * this.speed;
                         if (this.opacity < 0) { SpaceDog.deleteParticle(this); }
@@ -175,9 +175,9 @@ class Engine {
                     this.transform.y = Player.transform.y;
                 },
                 update() {
-                    this.opacity -= 0.02 * SpaceDog.deltaTime;
-                    this.transform.width += 3.5 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                    this.transform.height += 3.5 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                    this.opacity -= 0.02;
+                    this.transform.width += 3.5 * SpaceDog.resolutionFactor;
+                    this.transform.height += 3.5 * SpaceDog.resolutionFactor;
                     if (this.opacity < 0) { SpaceDog.deleteParticle(this); }
                 }
             });

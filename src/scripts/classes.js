@@ -328,7 +328,7 @@ class Console {
                 this.transform.y = SpaceDog.canvas.height - this.transform.height
             },
             render() {
-                this.blinkingCounter = this.blinkingCounter + SpaceDog.deltaTime;
+                this.blinkingCounter = this.blinkingCounter;
                 
                 if (this.blinkingCounter >= this.blinkingInterval) {
                     this.blinkingCounter = 0;

@@ -22,7 +22,7 @@ const PROPS = {
             this.transform.x = SpaceDog.canvas.width + this.transform.width + 10;
         },
         update() {
-            this.transform.x -= 0.5 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+            this.transform.x -= 0.5 * SpaceDog.resolutionFactor;
             if (this.transform.x < 0 - this.transform.width - 10) { this.start(); }
         },
     }),
@@ -37,7 +37,7 @@ const PROPS = {
             this.transform.y = 0;
         },
         update() {
-            this.transform.x += 0.2 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+            this.transform.x += 0.2 * SpaceDog.resolutionFactor;
             if (this.transform.x >= this.transform.width) { this.transform.x = 0; }
         },
         render() {
@@ -97,19 +97,19 @@ const Player = new Entity({
     },
     update() {
         if (SpaceDog.currentView == 0) {
-            this.transform.y += this.transform.speed[1] * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+            this.transform.y += this.transform.speed[1] * SpaceDog.resolutionFactor;
             if (this.mode == 0) {
-                this.transform.speed[1] += CONFIG.gravityFactor * SpaceDog.deltaTime;
-                this.transform.rotation /= 1 + 0.05 * SpaceDog.deltaTime;
+                this.transform.speed[1] += CONFIG.gravityFactor;
+                this.transform.rotation /= 1 + 0.05;
             } else {
-                this.transform.speed[1] += CONFIG.gravityFactor * 0.8 * SpaceDog.deltaTime;
+                this.transform.speed[1] += CONFIG.gravityFactor * 0.8;
                 this.transform.rotation = 18 * this.transform.speed[1] / 5
             }
-            this.particleTimelapse += SpaceDog.deltaTime;
+            this.particleTimelapse += 1;
 
-            this.kilometersCount += 0.0111 * (BIOMES[SpaceDog.currentBiome].initialSpeed + Player.aditionalSpeed) / 5 * SpaceDog.deltaTime;
+            this.kilometersCount += 0.0111 * (BIOMES[SpaceDog.currentBiome].initialSpeed + Player.aditionalSpeed) / 5;
 
-            this.aditionalSpeed += 0.0001 * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+            this.aditionalSpeed += 0.0001 * SpaceDog.resolutionFactor;
 
 
             if (this.transform.y > SpaceDog.canvas.height) {
@@ -148,11 +148,11 @@ const Player = new Entity({
                         this.transform.rotation = Player.transform.rotation + randomBetween(-15, 15);
                     },
                     update() {
-                        this.opacity -= 0.02 * SpaceDog.deltaTime;
-                        this.transform.width += 0.2 * SpaceDog.deltaTime;
-                        this.transform.height += 0.2 * SpaceDog.deltaTime;
-                        this.transform.x -= (Math.cos(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                        this.transform.y -= (Math.sin(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                        this.opacity -= 0.02;
+                        this.transform.width += 0.2;
+                        this.transform.height += 0.2;
+                        this.transform.x -= (Math.cos(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
+                        this.transform.y -= (Math.sin(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
                         if (this.transform.x < 0 - this.transform.width) { SpaceDog.deleteParticle(this); }
                     }
                 });
@@ -184,9 +184,9 @@ const Player = new Entity({
                 ASSETS.audio.effects[1].currentTime = 0;
                 ASSETS.audio.effects[1].play();
             } else {
-                this.transform.speed[1] -= 0.3 * SpaceDog.deltaTime;
+                this.transform.speed[1] -= 0.3;
                 this.audioDelay++;
-                if (this.audioDelay >= 6 / SpaceDog.deltaTime) {
+                if (this.audioDelay >= 6) {
                     this.audioDelay = 0;
                     ASSETS.audio.effects[4].currentTime = 0;
                     ASSETS.audio.effects[4].play();
@@ -217,7 +217,7 @@ const Pet = new Entity({
     update() {
         if (CONFIG.unlockedPets) { this.hidden = false; }
         if (this.skin != 2) {
-            this.spriteDelayCounter = this.spriteDelayCounter + SpaceDog.deltaTime;
+            this.spriteDelayCounter = this.spriteDelayCounter + 1;
             if (this.spriteDelayCounter >= this.spriteInterval) {
                 this.currentSprite = (this.currentSprite + 1) % this.sprites.length;
                 this.spriteDelayCounter = 0;
@@ -225,20 +225,20 @@ const Pet = new Entity({
         } else { this.currentSprite = this.transform.speed[1] < 0 ? 1 : 0; }
 
         if (SpaceDog.currentView == 0 || SpaceDog.currentView == 1) {
-            this.transform.y += this.transform.speed[1] * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+            this.transform.y += this.transform.speed[1] * SpaceDog.resolutionFactor;
             this.transform.rotation = 18 * this.transform.speed[1] / 3;
             if (!Player.hidden) {
-                this.transform.speed[1] += 0.12 * Math.sign(Player.transform.y - this.transform.y) * SpaceDog.deltaTime
+                this.transform.speed[1] += 0.12 * Math.sign(Player.transform.y - this.transform.y);
                 if (this.transform.speed[1] > 5) {
                     this.transform.speed[1] = 5
                 } else if (this.transform.speed[1] < -5) {
                     this.transform.speed[1] = -5
                 }
             } else {
-                this.transform.speed[1] += 0.1 * SpaceDog.deltaTime
+                this.transform.speed[1] += 0.1;
             }
             if (this.skin == 1) {
-                this.particleTimelapse += SpaceDog.deltaTime;
+                this.particleTimelapse += 1;
                 if (this.particleTimelapse >= this.particleFrequency && !this.hidden) {
                     this.particleTimelapse = 0;
                     new Particle({
@@ -255,11 +255,11 @@ const Pet = new Entity({
                             this.transform.rotation = Pet.transform.rotation + randomBetween(-15, 15);
                         },
                         update() {
-                            this.opacity -= 0.02 * SpaceDog.deltaTime;
-                            this.transform.width += 0.2 * SpaceDog.deltaTime;
-                            this.transform.height += 0.2 * SpaceDog.deltaTime;
-                            this.transform.x -= (Math.cos(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                            this.transform.y -= (Math.sin(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                            this.opacity -= 0.02;
+                            this.transform.width += 0.2;
+                            this.transform.height += 0.2;
+                            this.transform.x -= (Math.cos(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
+                            this.transform.y -= (Math.sin(degToRad(this.transform.direction)) * this.biome.initialSpeed + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
                             if (this.transform.x < 0 - this.transform.width) { SpaceDog.deleteParticle(this); }
                         }
                     });
@@ -916,7 +916,7 @@ const BIOMES = [
                     this.transform.x = SpaceDog.canvas.width + this.transform.width / 2;
                 },
                 update() {
-                    this.animationTime += SpaceDog.deltaTime;
+                    this.animationTime += 1;
                     if (this.animationTime >= this.animationInterval) {
                         this.animationTime = 0;
                         this.currentSprite = (this.currentSprite + 1) % this.sprites.length;
@@ -942,13 +942,13 @@ const BIOMES = [
                                         ASSETS.audio.effects[3].play();
                                     },
                                     update() {
-                                        this.animationTime += SpaceDog.deltaTime;
+                                        this.animationTime += 1;
                                         if (this.animationTime >= this.animationInterval) {
                                             this.animationTime = 0;
                                             this.currentSprite = (this.currentSprite + 1) % this.sprites.length;
                                         }
-                                        this.transform.x -= (Math.cos(degToRad(this.transform.rotation)) * this.speed + 3) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                                        this.transform.y -= (Math.sin(degToRad(this.transform.rotation)) * this.speed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                                        this.transform.x -= (Math.cos(degToRad(this.transform.rotation)) * this.speed + 3) * SpaceDog.resolutionFactor;
+                                        this.transform.y -= (Math.sin(degToRad(this.transform.rotation)) * this.speed) * SpaceDog.resolutionFactor;
                                         if (this.transform.x < this.transform.width * -1) {
                                             SpaceDog.deleteEntity(this);
                                         }
@@ -973,7 +973,7 @@ const BIOMES = [
 
                     }
 
-                    this.transform.x -= 3 * SpaceDog.deltaTime * SpaceDog.resolutionFactor + Player.aditionalSpeed;
+                    this.transform.x -= 3 * SpaceDog.resolutionFactor + Player.aditionalSpeed;
 
                     if (!SpaceDog.gameStarted) return;
 
@@ -1013,8 +1013,8 @@ const BIOMES = [
                     this.transform.x = SpaceDog.canvas.width + this.transform.width / 2;
                 },
                 update() {
-                    this.transform.x -= (this.linearSpeed + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                    this.transform.rotation -= this.rotationSpeed * SpaceDog.deltaTime;
+                    this.transform.x -= (this.linearSpeed + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
+                    this.transform.rotation -= this.rotationSpeed;
 
                     let distanceX = this.transform.x - Player.transform.x;
                     let distanceY = this.transform.y - Player.transform.y;
@@ -1036,14 +1036,14 @@ const BIOMES = [
         },
         update() {
             if (SpaceDog.gameStarted) {
-                this.monsterSpawnTimelapse += 1 * SpaceDog.deltaTime;
+                this.monsterSpawnTimelapse += 1;
                 if (this.monsterSpawnTimelapse >= this.monsterSpawnInterval) {
                     this.monsterSpawnTimelapse = 0;
                     let entity = new Entity(this.entitiesParams[0]);
                     entity.start();
                     this.monsterSpawnInterval = randomBetween(120, 750, false);
                 }
-                this.asteroidSpawnTimelapse += 1 * SpaceDog.deltaTime;
+                this.asteroidSpawnTimelapse += 1;
                 if (this.asteroidSpawnTimelapse >= this.asteroidSpawnInterval) {
                     this.asteroidSpawnTimelapse = 0;
                     let entity = new Entity(this.entitiesParams[1]);
@@ -1110,8 +1110,8 @@ const BIOMES = [
                                             this.animationTime = 0;
                                             this.currentSprite = (this.currentSprite + 1) % this.sprites.length;
                                         }
-                                        this.transform.x -= (Math.cos(degToRad(this.transform.rotation)) * this.speed + 3) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                                        this.transform.y -= (Math.sin(degToRad(this.transform.rotation)) * this.speed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                                        this.transform.x -= (Math.cos(degToRad(this.transform.rotation)) * this.speed + 3) * SpaceDog.resolutionFactor;
+                                        this.transform.y -= (Math.sin(degToRad(this.transform.rotation)) * this.speed) * SpaceDog.resolutionFactor;
                                         if (this.transform.x < this.transform.width * -1) {
                                             SpaceDog.deleteEntity(this);
                                         }
@@ -1136,7 +1136,7 @@ const BIOMES = [
 
                     }
 
-                    this.transform.x -= (5 + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;;
+                    this.transform.x -= (5 + Player.aditionalSpeed) * SpaceDog.resolutionFactor;;
 
                     if (!SpaceDog.gameStarted) return;
 
@@ -1176,8 +1176,8 @@ const BIOMES = [
                     this.transform.x = SpaceDog.canvas.width + this.transform.width / 2;
                 },
                 update() {
-                    this.transform.x -= (this.linearSpeed + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                    this.transform.rotation -= this.rotationSpeed * SpaceDog.deltaTime;
+                    this.transform.x -= (this.linearSpeed + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
+                    this.transform.rotation -= this.rotationSpeed;
 
                     let distanceX = this.transform.x - Player.transform.x;
                     let distanceY = this.transform.y - Player.transform.y;
@@ -1209,15 +1209,15 @@ const BIOMES = [
                         if (distanceX < 0) this.flipped = true;
                         this.transform.rotation = radToDeg(Math.atan(distanceY / distanceX)) * (this.flipped ? -1 : 1);
 
-                        this.transform.x -= (Math.cos(degToRad(this.transform.rotation)) * this.speed + 5 + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
-                        this.transform.y -= (Math.sin(degToRad(this.transform.rotation)) * this.speed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                        this.transform.x -= (Math.cos(degToRad(this.transform.rotation)) * this.speed + 5 + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
+                        this.transform.y -= (Math.sin(degToRad(this.transform.rotation)) * this.speed) * SpaceDog.resolutionFactor;
 
                         let distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
                         if (distance < this.transform.height) {
                             SpaceDog.gameOver();
                         }
                     } else {
-                        this.transform.x -= (7 + Player.aditionalSpeed) * SpaceDog.deltaTime * SpaceDog.resolutionFactor;
+                        this.transform.x -= (7 + Player.aditionalSpeed) * SpaceDog.resolutionFactor;
                     }
                     if (this.transform.x < 0 - this.transform.width) { SpaceDog.deleteEntity(this); }
                 },
@@ -1232,21 +1232,21 @@ const BIOMES = [
         },
         update() {
             if (SpaceDog.gameStarted) {
-                this.monsterSpawnTimelapse += 1 * SpaceDog.deltaTime;
+                this.monsterSpawnTimelapse += 1;
                 if (this.monsterSpawnTimelapse >= this.monsterSpawnInterval) {
                     this.monsterSpawnTimelapse = 0;
                     let entity = new Entity(this.entitiesParams[0]);
                     entity.start();
                     this.monsterSpawnInterval = randomBetween(240, 1300, false);
                 }
-                this.asteroidSpawnTimelapse += 1 * SpaceDog.deltaTime;
+                this.asteroidSpawnTimelapse += 1;
                 if (this.asteroidSpawnTimelapse >= this.asteroidSpawnInterval) {
                     this.asteroidSpawnTimelapse = 0;
                     let entity = new Entity(this.entitiesParams[1]);
                     entity.start();
                     this.asteroidSpawnInterval = randomBetween(120, 60, false);
                 }
-                this.mosquitoSpawnTimelapse += 1 * SpaceDog.deltaTime;
+                this.mosquitoSpawnTimelapse += 1;
                 if (this.mosquitoSpawnTimelapse >= this.mosquitoSpawnInterval) {
                     this.mosquitoSpawnTimelapse = 0;
                     let entity = new Entity(this.entitiesParams[2]);
@@ -1257,5 +1257,3 @@ const BIOMES = [
         },
     }),
 ]
-
-
